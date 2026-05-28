@@ -1,0 +1,13 @@
+John Candidate
+Frontend Engineer
+
+Summary:
+Frontend developer with 4 years of experience building React dashboards and responsive interfaces.
+
+Skills:
+JavaScript, React, HTML, CSS, REST APIs, Git, Jest, Performance Optimization, Communication
+
+Experience:
+- Built internal analytics dashboard in React used by 200+ users.
+- Integrated REST APIs and improved page performance by 35%.
+- Worked with product and design teams in agile delivery.

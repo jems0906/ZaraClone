@@ -1,0 +1,27 @@
+{
+  "name": "zaraclone",
+  "version": "1.0.0",
+  "description": "AI resume-job match mini product",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend_clean\"",
+    "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix frontend_clean\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend_clean",
+    "test:backend": "npm test --prefix backend",
+    "test:integration": "npm run test:integration --prefix backend",
+    "build": "echo No build step required for frontend_clean"
+  },
+  "keywords": [
+    "resume",
+    "job-matching",
+    "react",
+    "node",
+    "postgres"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

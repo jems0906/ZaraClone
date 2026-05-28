@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "backend-dev",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev",
+				"--prefix",
+				"d:\\project\\ZaraClone\\backend"
+			],
+			"isBackground": true
+		},
+		{
+			"label": "frontend-static",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"d:\\project\\ZaraClone\\frontend_clean\\serve.js"
+			],
+			"isBackground": true
+		}
+	]
+}

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TalentMatch Mini</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --ink: #1b1a1a;
+        --muted: #595046;
+        --paper: #f8f4ec;
+        --panel: #fffdf8;
+        --line: #eadfce;
+        --accent: #dd6b20;
+        --accent-soft: #fff2e6;
+        --good: #2d7d46;
+        --warn: #b07b12;
+        --risk: #b0432a;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 0% 0%, #ffe6cf 0, transparent 40%),
+          radial-gradient(circle at 100% 0%, #fdebd4 0, transparent 38%),
+          var(--paper);
+        min-height: 100vh;
+      }
+      .page { width: min(1200px, 94vw); margin: 0 auto; padding: 30px 0 50px; animation: rise 500ms ease; }
+      .auth-page { min-height: 100vh; display: grid; place-items: center; position: relative; }
+      .glow { position: absolute; inset: 0; background: linear-gradient(140deg, rgba(255, 210, 173, 0.4), rgba(255, 255, 255, 0.1)), repeating-linear-gradient(45deg, rgba(221, 107, 32, 0.07), rgba(221, 107, 32, 0.07) 4px, transparent 4px, transparent 13px); z-index: 0; }
+      .auth-shell { width: min(1120px, 94vw); display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 18px; align-items: stretch; position: relative; z-index: 1; }
+      .auth-hero, .auth-card { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 16px 40px rgba(72, 40, 11, 0.14); }
+      .auth-hero { padding: 30px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative; }
+      .auth-hero::after { content: ""; position: absolute; inset: auto -20% -30% auto; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(221, 107, 32, 0.18), transparent 68%); pointer-events: none; }
+      .auth-card { width: 100%; padding: 28px; position: relative; }
+      .eyebrow { display: inline-flex; align-items: center; gap: 8px; width: fit-content; padding: 8px 12px; border-radius: 999px; background: #fff1e4; color: #a64a0a; border: 1px solid #f4d1b2; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; }
+      .auth-lead { max-width: 560px; margin-top: 18px; font-size: clamp(2.2rem, 3.6vw, 4.2rem); line-height: 0.95; }
+      .auth-copy { max-width: 580px; margin-top: 16px; color: var(--muted); font-size: 1.03rem; line-height: 1.55; }
+      .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+      .feature-card { background: rgba(255, 255, 255, 0.72); border: 1px solid #f2deca; border-radius: 16px; padding: 14px; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+      .feature-card strong { display: block; margin-bottom: 5px; font-size: 0.95rem; }
+      .feature-card span { color: var(--muted); font-size: 0.92rem; line-height: 1.45; }
+      .mini-dashboard { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 12px; margin-top: 20px; }
+      .metric-card, .preview-card { background: rgba(255, 253, 248, 0.86); border: 1px solid #efe0cf; border-radius: 18px; padding: 16px; }
+      .metric-number { font-family: "Source Serif 4", serif; font-size: clamp(1.8rem, 2vw, 2.2rem); margin: 0; }
+      .metric-label { color: var(--muted); margin: 4px 0 0; }
+      .preview-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f0e2d3; }
+      .preview-row:last-child { border-bottom: none; }
+      h1 { margin: 0; font-family: "Source Serif 4", serif; font-size: clamp(1.8rem, 2vw, 2.4rem); }
+      h2 { margin: 0; font-family: "Source Serif 4", serif; font-size: 1.4rem; }
+      h3 { margin: 0 0 8px; font-size: 1rem; }
+      .subtitle { margin: 8px 0 0; color: var(--muted); }
+      .topbar { display: flex; justify-content: space-between; align-items: flex-end; gap: 14px; margin-bottom: 18px; }
+      .topbar-actions { display: flex; align-items: center; gap: 8px; }
+      .pill { background: var(--accent-soft); border: 1px solid #f8d9bc; color: #a64a0a; border-radius: 999px; padding: 7px 12px; font-size: 0.88rem; }
+      .dashboard-shell { display: grid; gap: 14px; }
+      .hero-banner { background: linear-gradient(135deg, #fffaf2 0%, #fff2e2 100%); border: 1px solid #f0dcc4; border-radius: 22px; padding: 18px; display: grid; gap: 16px; grid-template-columns: 1.15fr 0.85fr; box-shadow: 0 12px 28px rgba(88, 55, 15, 0.08); }
+      .hero-copy { display: grid; gap: 8px; align-content: start; }
+      .hero-kicker { display: inline-flex; width: fit-content; padding: 6px 10px; border-radius: 999px; background: #fff3e3; border: 1px solid #f1d5b8; color: #a55013; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+      .hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+      .stat-card { background: rgba(255, 255, 255, 0.78); border: 1px solid #efdcc7; border-radius: 16px; padding: 12px; }
+      .stat-card p { margin: 0; }
+      .stat-value { font-family: "Source Serif 4", serif; font-size: 1.6rem; line-height: 1; }
+      .stat-label { margin-top: 6px; color: var(--muted); font-size: 0.92rem; }
+      .workspace-card { background: rgba(255, 255, 255, 0.75); border: 1px solid #efdcc7; border-radius: 18px; padding: 14px; display: grid; gap: 10px; align-content: start; }
+      .workspace-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0e2d3; }
+      .workspace-row:last-child { border-bottom: none; }
+      .workspace-label { color: var(--muted); font-size: 0.94rem; }
+      .section-intro { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+      .section-intro p { margin: 0; color: var(--muted); }
+      .empty-state { border: 1px dashed #dfc7aa; border-radius: 14px; padding: 14px; color: var(--muted); background: #fffdf9; }
+      .grid { display: grid; gap: 14px; margin-bottom: 14px; }
+      .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; box-shadow: 0 6px 20px rgba(67, 40, 8, 0.09); }
+      .stack { display: grid; gap: 9px; margin-top: 10px; }
+      input, textarea, select, button { font: inherit; }
+      input, textarea, select { width: 100%; border: 1px solid #dbcab3; border-radius: 10px; background: #fff; padding: 10px 12px; }
+      button { border: none; border-radius: 10px; background: linear-gradient(140deg, #dd6b20, #c1540f); color: #fff; padding: 10px 14px; cursor: pointer; transition: transform 160ms ease, opacity 160ms ease; }
+      button:hover { transform: translateY(-1px); opacity: 0.94; }
+      .mode-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+      .mode-toggle button { background: #f7f0e5; color: #8d5520; border: 1px solid #f0ddc5; }
+      .mode-toggle button.active { background: #dd6b20; color: #fff; }
+      .ghost-btn { width: 100%; margin-top: 8px; background: #fff7ee; color: #9b4b10; border: 1px solid #f0d2b2; }
+      .muted, .light { color: var(--muted); }
+      .history-list { display: grid; gap: 8px; margin-top: 8px; }
+      .history-item { background: #fff; color: var(--ink); border: 1px solid #eee0cf; display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; }
+      .job { margin: 0; font-weight: 700; }
+      .score-badge { padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 0.85rem; }
+      .score-badge.high { background: #ddf4e2; color: var(--good); }
+      .score-badge.mid { background: #fff4d8; color: var(--warn); }
+      .score-badge.low { background: #fee7e1; color: var(--risk); }
+      .report-card { overflow: hidden; }
+      .report-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+      .report-actions { display: flex; gap: 8px; align-items: center; }
+      .report-grid { margin-top: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      .report-grid ul { margin: 0; padding-left: 18px; }
+      .text-compare { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .text-compare article { max-height: 300px; overflow: auto; border: 1px solid #eddfcb; border-radius: 12px; padding: 10px; background: #fff; }
+      mark { background: #ffe1c2; color: #632d00; border-radius: 4px; padding: 0 2px; }
+      .chart-wrap { margin-top: 12px; }
+      .spark-bars { display: grid; gap: 9px; }
+      .spark-row { display: grid; grid-template-columns: 84px 1fr 36px; align-items: center; gap: 8px; }
+      .spark-label, .spark-score { font-size: 0.86rem; color: var(--muted); }
+      .spark-track { width: 100%; height: 10px; background: #f4e4d2; border-radius: 999px; overflow: hidden; }
+      .spark-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #dd6b20, #b84d0d); }
+      .recommend-box { margin-top: 10px; background: var(--accent-soft); border: 1px solid #f4d2b4; border-radius: 10px; padding: 8px; }
+      .error { color: #8f2e20; background: #ffe2dc; border: 1px solid #ffbfaf; border-radius: 10px; padding: 8px 10px; }
+      .admin-head { display: flex; align-items: center; justify-content: space-between; }
+      @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+      @media (max-width: 960px) { .auth-shell, .hero-banner, .mini-dashboard, .feature-grid, .grid.three, .grid.two, .report-grid, .text-compare, .hero-stats { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: flex-start; } }
+      @media (max-width: 640px) { .auth-hero, .auth-card { padding: 22px; } .auth-lead { font-size: 2.1rem; } }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@3.0.4/dist/jspdf.umd.min.js"></script>
+
+    <script type="text/babel">
+      const API_BASE_URL = window.location.hostname === "localhost" ? "http://localhost:4000" : window.location.origin;
+      const client = axios.create({ baseURL: API_BASE_URL });
+      client.interceptors.request.use((config) => {
+        const token = localStorage.getItem("token");
+        if (token) config.headers.Authorization = `Bearer ${token}`;
+        return config;
+      });
+
+      function escapeRegex(value) { return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+      function HighlightText({ text, phrases = [] }) {
+        if (!text) return <p className="light">No text available.</p>;
+        const uniquePhrases = Array.from(new Set((phrases || []).filter((item) => item?.length > 2)));
+        if (!uniquePhrases.length) return <p>{text}</p>;
+        const regex = new RegExp(`(${uniquePhrases.map((item) => escapeRegex(item)).join("|")})`, "gi");
+        const chunks = text.split(regex);
+        return <p>{chunks.map((chunk, index) => uniquePhrases.some((phrase) => phrase.toLowerCase() === chunk.toLowerCase()) ? <mark key={`${chunk}-${index}`}>{chunk}</mark> : <span key={`${chunk}-${index}`}>{chunk}</span>)}</p>;
+      }
+
+      function exportMatchPdf(match) {
+        const doc = new jspdf.jsPDF();
+        doc.setFontSize(18); doc.text("AI Match Report", 14, 18);
+        doc.setFontSize(12); doc.text(`Match Score: ${match.score}/100`, 14, 30); doc.text(`Resume: ${match.resume_title}`, 14, 38); doc.text(`Job: ${match.job_title}${match.company ? ` (${match.company})` : ""}`, 14, 46);
+        doc.setFontSize(11); doc.text(doc.splitTextToSize(`Strengths: ${match.strengths_summary}`, 180), 14, 58); doc.text(doc.splitTextToSize(`Missing Skills: ${(match.missing_skills || []).join(", ") || "None"}`, 180), 14, 80); doc.text(doc.splitTextToSize(`Keyword Gaps: ${(match.keyword_gaps || []).join(", ") || "None"}`, 180), 14, 100); doc.save(`match-report-${match.id}.pdf`);
+      }
+
+      function Badge({ value }) { const tone = value >= 80 ? "high" : value >= 60 ? "mid" : "low"; return <span className={`score-badge ${tone}`}>{value}/100</span>; }
+
+      function App() {
+        const [mode, setMode] = React.useState("login");
+        const [authForm, setAuthForm] = React.useState({ name: "", email: "", password: "" });
+        const [user, setUser] = React.useState(null);
+        const [error, setError] = React.useState("");
+        const [resumes, setResumes] = React.useState([]);
+        const [jobs, setJobs] = React.useState([]);
+        const [history, setHistory] = React.useState([]);
+        const [dashboard, setDashboard] = React.useState({ recent: [], averageScore: 0, totalMatches: 0 });
+        const [selectedMatch, setSelectedMatch] = React.useState(null);
+        const [adminLogs, setAdminLogs] = React.useState([]);
+        const [recommendations, setRecommendations] = React.useState([]);
+        const [resumeTitle, setResumeTitle] = React.useState("My Resume");
+        const [resumeFile, setResumeFile] = React.useState(null);
+        const [jobForm, setJobForm] = React.useState({ title: "", company: "", description: "" });
+        const [matchForm, setMatchForm] = React.useState({ resumeId: "", jobId: "" });
+        const isAuthenticated = Boolean(localStorage.getItem("token"));
+
+        async function bootstrapData() {
+          const [resumeRes, jobRes, historyRes, dashRes] = await Promise.all([client.get("/resumes"), client.get("/jobs"), client.get("/matches/history"), client.get("/matches/dashboard/recent")]);
+          setResumes(resumeRes.data); setJobs(jobRes.data); setHistory(historyRes.data); setDashboard(dashRes.data);
+          if (resumeRes.data[0] && !matchForm.resumeId) setMatchForm((prev) => ({ ...prev, resumeId: String(resumeRes.data[0].id) }));
+          if (jobRes.data[0] && !matchForm.jobId) setMatchForm((prev) => ({ ...prev, jobId: String(jobRes.data[0].id) }));
+        }
+
+        React.useEffect(() => { if (isAuthenticated) bootstrapData().catch((requestError) => setError(requestError.response?.data?.error || "Failed loading data")); }, [isAuthenticated]);
+
+        async function handleAuthSubmit(event) { event.preventDefault(); setError(""); try { if (mode === "register") await client.post("/auth/register", authForm); const login = await client.post("/auth/login", { email: authForm.email, password: authForm.password }); localStorage.setItem("token", login.data.token); setUser(login.data.user); await bootstrapData(); } catch (requestError) { setError(requestError.response?.data?.error || "Authentication failed"); } }
+        async function uploadResume(event) { event.preventDefault(); if (!resumeFile) return setError("Please choose a resume file"); const formData = new FormData(); formData.append("title", resumeTitle); formData.append("resume", resumeFile); try { await client.post("/resumes", formData); setResumeFile(null); await bootstrapData(); } catch (requestError) { setError(requestError.response?.data?.error || "Resume upload failed"); } }
+        async function createJob(event) { event.preventDefault(); try { await client.post("/jobs", jobForm); setJobForm({ title: "", company: "", description: "" }); await bootstrapData(); } catch (requestError) { setError(requestError.response?.data?.error || "Job creation failed"); } }
+        async function createMatch(event) { event.preventDefault(); try { const created = await client.post("/matches", { resumeId: Number(matchForm.resumeId), jobId: Number(matchForm.jobId) }); await openMatch(created.data.id); await bootstrapData(); } catch (requestError) { setError(requestError.response?.data?.error || "Failed to create match"); } }
+        async function openMatch(matchId) { try { const details = await client.get(`/matches/${matchId}`); setSelectedMatch(details.data); } catch (requestError) { setError(requestError.response?.data?.error || "Failed to load match"); } }
+        async function loadRecommendations(resumeId) { if (!resumeId) return; try { const response = await client.get(`/jobs/recommendations/${resumeId}`); setRecommendations(response.data); } catch (requestError) { setError(requestError.response?.data?.error || "Failed to load recommendations"); } }
+        async function loadAdminLogs() { try { const response = await client.get("/matches/admin/logs"); setAdminLogs(response.data); } catch (requestError) { setError(requestError.response?.data?.error || "Admin logs unavailable"); } }
+        function logout() { localStorage.removeItem("token"); setUser(null); setSelectedMatch(null); setHistory([]); setDashboard({ recent: [], averageScore: 0, totalMatches: 0 }); }
+        function useDemoCredentials() {
+          setMode("login");
+          setAuthForm((prev) => ({ ...prev, email: "demo@talentmatch.local", password: "TalentMatch123!" }));
+          setError("");
+        }
+        const chartData = React.useMemo(() => dashboard.recent.slice().reverse().map((item) => ({ label: item.job_title?.slice(0, 12) || "job", score: item.score })), [dashboard.recent]);
+
+        if (!isAuthenticated) {
+          return (
+            <div className="page auth-page">
+              <div className="glow" />
+              <div className="auth-shell">
+                <section className="auth-hero">
+                  <div>
+                    <div className="eyebrow">Recruiter ops / quick screen</div>
+                    <h1 className="auth-lead">TalentMatch Mini</h1>
+                    <p className="auth-copy">
+                      Upload resumes, compare against roles, and get a scored match report with missing skills, keyword gaps, and highlighted evidence.
+                    </p>
+                  </div>
+                  <div>
+                    <div className="feature-grid">
+                      <div className="feature-card"><strong>0–100 score</strong><span>Rank candidates with a weighted match score and saved history.</span></div>
+                      <div className="feature-card"><strong>Skill gaps</strong><span>See what is missing before moving a profile forward.</span></div>
+                      <div className="feature-card"><strong>Job recs</strong><span>Surface roles that better fit the selected resume.</span></div>
+                    </div>
+                    <div className="mini-dashboard">
+                      <div className="metric-card">
+                        <p className="metric-number">3 min</p>
+                        <p className="metric-label">to screen a role batch</p>
+                      </div>
+                      <div className="preview-card">
+                        <div className="preview-row"><span>Matched phrases</span><strong>highlighted</strong></div>
+                        <div className="preview-row"><span>PDF export</span><strong>one click</strong></div>
+                        <div className="preview-row"><span>Admin review</span><strong>enabled</strong></div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section className="auth-card">
+                  <h2>{mode === "register" ? "Create account" : "Welcome back"}</h2>
+                  <p className="subtitle">{mode === "register" ? "Start a new workspace for resume matching." : "Sign in to continue screening candidates."}</p>
+                  <div className="workspace-card" style={{ marginBottom: 12 }}>
+                    <div className="workspace-row"><span className="workspace-label">Demo email</span><strong>demo@talentmatch.local</strong></div>
+                    <div className="workspace-row"><span className="workspace-label">Demo password</span><strong>TalentMatch123!</strong></div>
+                  </div>
+                  <div className="mode-toggle">
+                    <button type="button" className={mode === "login" ? "active" : ""} onClick={() => setMode("login")}>Login</button>
+                    <button type="button" className={mode === "register" ? "active" : ""} onClick={() => setMode("register")}>Register</button>
+                  </div>
+                  <button type="button" className="ghost-btn" onClick={useDemoCredentials}>Use demo credentials</button>
+                  <form onSubmit={handleAuthSubmit} className="stack">
+                    {mode === "register" ? <input placeholder="Full name" value={authForm.name} onChange={(event) => setAuthForm((prev) => ({ ...prev, name: event.target.value }))} /> : null}
+                    <input placeholder="Email" type="email" value={authForm.email} onChange={(event) => setAuthForm((prev) => ({ ...prev, email: event.target.value }))} />
+                    <input placeholder="Password" type="password" value={authForm.password} onChange={(event) => setAuthForm((prev) => ({ ...prev, password: event.target.value }))} />
+                    <button type="submit">{mode === "register" ? "Create account" : "Sign in"}</button>
+                  </form>
+                  {error ? <p className="error">{error}</p> : null}
+                </section>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div className="page dashboard-shell">
+            <header className="topbar">
+              <div>
+                <h1>TalentMatch Dashboard</h1>
+                <p className="subtitle">Recruiter-style screening view for resumes vs job descriptions.</p>
+              </div>
+              <div className="topbar-actions">
+                <span className="pill">Avg score: {dashboard.averageScore}</span>
+                <button onClick={logout}>Logout</button>
+              </div>
+            </header>
+
+            {error ? <p className="error">{error}</p> : null}
+
+            <section className="hero-banner">
+              <div className="hero-copy">
+                <div className="hero-kicker">Signed in as {user?.name || user?.email || "Recruiter"}</div>
+                <h2>Screen faster, keep evidence, and surface the best-fit roles.</h2>
+                <p className="subtitle">Use the workspace below to upload resumes, create jobs, generate a score, and review the exact phrases that influenced the match.</p>
+                <div className="hero-stats">
+                  <div className="stat-card"><p className="stat-value">{resumes.length}</p><p className="stat-label">resumes stored</p></div>
+                  <div className="stat-card"><p className="stat-value">{jobs.length}</p><p className="stat-label">open roles tracked</p></div>
+                  <div className="stat-card"><p className="stat-value">{dashboard.totalMatches}</p><p className="stat-label">matches scored</p></div>
+                </div>
+              </div>
+              <div className="workspace-card">
+                <div className="workspace-row"><span className="workspace-label">Latest score trend</span><strong>{dashboard.recent[0]?.score ?? "--"}</strong></div>
+                <div className="workspace-row"><span className="workspace-label">Best-fit history items</span><strong>{history.filter((item) => item.score >= 80).length}</strong></div>
+                <div className="workspace-row"><span className="workspace-label">Recommended job list</span><strong>{recommendations.length || 0}</strong></div>
+              </div>
+            </section>
+
+            <section className="grid three">
+              <article className="card"><h2>Upload Resume</h2><form onSubmit={uploadResume} className="stack"><input value={resumeTitle} onChange={(event) => setResumeTitle(event.target.value)} placeholder="Resume title" /><input type="file" accept=".pdf,.txt,.docx" onChange={(event) => setResumeFile(event.target.files?.[0] || null)} /><button type="submit">Save resume</button></form><p className="muted">Stored resumes: {resumes.length}</p></article>
+              <article className="card"><h2>Add Job Description</h2><form onSubmit={createJob} className="stack"><input value={jobForm.title} onChange={(event) => setJobForm((prev) => ({ ...prev, title: event.target.value }))} placeholder="Role title" /><input value={jobForm.company} onChange={(event) => setJobForm((prev) => ({ ...prev, company: event.target.value }))} placeholder="Company" /><textarea value={jobForm.description} onChange={(event) => setJobForm((prev) => ({ ...prev, description: event.target.value }))} placeholder="Paste the job description" rows="4" /><button type="submit">Save job</button></form><p className="muted">Tracked jobs: {jobs.length}</p></article>
+              <article className="card"><h2>Create Match</h2><form onSubmit={createMatch} className="stack"><select value={matchForm.resumeId} onChange={(event) => { setMatchForm((prev) => ({ ...prev, resumeId: event.target.value })); loadRecommendations(event.target.value); }}><option value="">Select resume</option>{resumes.map((resume) => <option key={resume.id} value={resume.id}>{resume.title}</option>)}</select><select value={matchForm.jobId} onChange={(event) => setMatchForm((prev) => ({ ...prev, jobId: event.target.value }))}><option value="">Select job</option>{jobs.map((job) => <option key={job.id} value={job.id}>{job.title} {job.company ? `- ${job.company}` : ""}</option>)}</select><button type="submit">Run AI match</button></form>{recommendations.length ? <div className="recommend-box"><h3>Top recommendations</h3>{recommendations.map((item) => <p key={item.jobId}>{item.title}: <strong>{item.score}</strong></p>)}</div> : <p className="muted">Choose a resume to surface fit-matched roles.</p>}</article>
+            </section>
+
+            <section className="grid two">
+              <article className="card"><div className="section-intro"><div><h2>Recent Match Scores</h2><p>Quick visual read on the latest comparisons.</p></div></div><div className="chart-wrap"><div className="spark-bars">{chartData.length ? chartData.map((item) => <div key={`${item.label}-${item.score}`} className="spark-row"><span className="spark-label">{item.label}</span><div className="spark-track"><div className="spark-fill" style={{ width: `${item.score}%` }} /></div><span className="spark-score">{item.score}</span></div>) : <div className="empty-state">No match data yet. Create the first comparison to populate the dashboard.</div>}</div></div></article>
+              <article className="card"><div className="section-intro"><div><h2>Saved Comparison History</h2><p>Review scores and reopen any prior match.</p></div></div><div className="history-list">{history.map((item) => <button key={item.id} className="history-item" onClick={() => openMatch(item.id)}><div><p className="job">{item.job_title}</p><p className="light">{item.resume_title}</p></div><Badge value={item.score} /></button>)}{!history.length ? <div className="empty-state">No matches yet. Run a match to build history.</div> : null}</div></article>
+            </section>
+
+            {selectedMatch ? <section className="card report-card"><div className="report-header"><div><h2>Match Report</h2><p className="light">{selectedMatch.resume_title} vs {selectedMatch.job_title}</p></div><div className="report-actions"><Badge value={selectedMatch.score} /><button onClick={() => exportMatchPdf(selectedMatch)}>Export PDF</button></div></div><div className="report-grid"><article><h3>Strengths Summary</h3><p>{selectedMatch.strengths_summary}</p></article><article><h3>Missing Skills</h3><ul>{(selectedMatch.missing_skills || []).map((skill) => <li key={skill}>{skill}</li>)}</ul></article><article><h3>Keyword Gaps</h3><ul>{(selectedMatch.keyword_gaps || []).map((term) => <li key={term}>{term}</li>)}</ul></article></div><div className="text-compare"><article><h3>Resume (highlighted)</h3><HighlightText text={selectedMatch.parsed_text} phrases={selectedMatch.matched_phrases || []} /></article><article><h3>Job Description (highlighted)</h3><HighlightText text={selectedMatch.description_text} phrases={selectedMatch.matched_phrases || []} /></article></div></section> : null}
+
+            {user?.role === "admin" ? <section className="card"><div className="admin-head"><h2>Admin Match Logs</h2><button onClick={loadAdminLogs}>Load logs</button></div><div className="history-list">{adminLogs.map((log) => <p key={log.id} className="light">{log.email} | {log.job_title} | score {log.score}</p>)}</div></section> : null}
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
