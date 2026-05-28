@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "test": "node --test",
+    "test": "node --test src/services/**/*.test.js",
     "test:integration": "node --test src/integration/**/*.test.js"
   },
   "keywords": [
