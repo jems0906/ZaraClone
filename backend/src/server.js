@@ -50,10 +50,15 @@ app.use("/matches", matchRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(frontendDir));
-  app.get("*", (req, res, next) => {
+  app.use((req, res, next) => {
+    if (req.method !== "GET") {
+      return next();
+    }
+
     if (["/auth", "/resumes", "/jobs", "/matches", "/health"].some((prefix) => req.path.startsWith(prefix))) {
       return next();
     }
+
     return res.sendFile(path.join(frontendDir, "index.html"));
   });
 }
