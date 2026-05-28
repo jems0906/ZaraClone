@@ -11,6 +11,7 @@ const jobRoutes = require("./routes/jobRoutes");
 const matchRoutes = require("./routes/matchRoutes");
 
 const app = express();
+const frontendDir = path.resolve(__dirname, "../../frontend_clean");
 
 async function seedDemoUser() {
   await pool.query(
@@ -46,6 +47,16 @@ app.use("/auth", authRoutes);
 app.use("/resumes", resumeRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/matches", matchRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(frontendDir));
+  app.get("*", (req, res, next) => {
+    if (["/auth", "/resumes", "/jobs", "/matches", "/health"].some((prefix) => req.path.startsWith(prefix))) {
+      return next();
+    }
+    return res.sendFile(path.join(frontendDir, "index.html"));
+  });
+}
 
 app.use((err, req, res, next) => {
   if (err?.name === "MulterError") {

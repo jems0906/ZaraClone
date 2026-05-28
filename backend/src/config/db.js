@@ -7,6 +7,8 @@ if (!rawUrl) {
 }
 
 const parsed = new URL(rawUrl);
+const sslMode = parsed.searchParams.get("sslmode");
+const useSsl = process.env.PGSSL === "true" || sslMode === "require";
 
 const pool = new Pool({
   host: parsed.hostname,
@@ -14,6 +16,7 @@ const pool = new Pool({
   user: decodeURIComponent(parsed.username),
   password: decodeURIComponent(parsed.password),
   database: parsed.pathname.replace(/^\//, ""),
+  ssl: useSsl ? { rejectUnauthorized: false } : undefined,
 });
 
 module.exports = pool;

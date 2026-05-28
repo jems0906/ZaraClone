@@ -174,6 +174,24 @@ curl http://localhost:4000/health
 
 If frontend auth/actions fail, check backend health first and ensure PostgreSQL is up.
 
+## Deploy To Render
+
+This repo includes a Render Blueprint file at `render.yaml`.
+
+### Steps
+
+1. Push this repository to GitHub.
+2. In Render, click **New** -> **Blueprint**.
+3. Connect this GitHub repository.
+4. Render will create:
+	- a PostgreSQL database (`zaraclone-db`)
+	- a Node web service (`zaraclone-web`)
+5. After deploy completes, open the web service URL.
+
+Notes:
+- The backend initializes `backend/sql/schema.sql` automatically on service startup.
+- Frontend is served by the backend in production, so a single Render URL hosts both UI and API.
+
 ## Notes
 
 - Matching logic is implemented as a modular service in `backend/src/services/matchingService.js` so it can later be extracted into a separate service.
